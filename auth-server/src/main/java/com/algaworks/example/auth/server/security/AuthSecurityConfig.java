@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.server.authorization.client.InMemoryR
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -60,4 +61,11 @@ public class AuthSecurityConfig {
                 Arrays.asList(awuserClient)
         );
     }
+    @Bean
+    public ProviderSettings providerSettings(AuthProperties authProperties) {
+        return ProviderSettings.builder()
+                .issuer(authProperties.getProviderUri())
+                .build();
+    }
+
 }
