@@ -1,9 +1,14 @@
 package com.algaworks.example.auth.server.security;
 
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.OAuth2Au
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwsEncoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -19,6 +26,9 @@ import org.springframework.security.oauth2.server.authorization.config.ProviderS
 import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -68,4 +78,29 @@ public class AuthSecurityConfig {
                 .build();
     }
 
+    @Bean
+    public JWKSet jwkSet(AuthProperties authProperties) throws Exception {
+        final var jksProperties = authProperties.getJks();
+        final String jksPath = authProperties.getJks().getPath();
+        final InputStream inputStream = new ClassPathResource(jksPath).getInputStream();
+
+        final KeyStore keyStore = KeyStore.getInstance("JKS");
+        keyStore.load(inputStream, jksProperties.getStorepass().toCharArray());
+
+        RSAKey rsaKey = RSAKey.load(keyStore,
+                jksProperties.getAlias(),
+                jksProperties.getKeypass().toCharArray());
+
+        return new JWKSet(rsaKey);
+    }
+
+    @Bean
+    public JWKSource<SecurityContext> jwkSource(JWKSet jwkSet) {
+        return ((jwkSelector, securityContext) -> jwkSelector.select(jwkSet));
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
+        return new NimbusJwsEncoder(jwkSource);
+    }
 }
