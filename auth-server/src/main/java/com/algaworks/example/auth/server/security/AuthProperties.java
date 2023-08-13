@@ -1,11 +1,16 @@
 package com.algaworks.example.auth.server.security;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
 @Component
 @Validated
 @ConfigurationProperties("aw.auth")
@@ -14,12 +19,24 @@ public class AuthProperties {
     @NotBlank
     private String providerUri;
 
-    public String getProviderUri() {
-        return providerUri;
-    }
+    @NotNull
+    private JksProperties jks;
 
-    public void setProviderUri(String providerUri) {
-        this.providerUri = providerUri;
-    }
+    @Getter
+    @Setter
+    static class JksProperties {
 
+        @NotBlank
+        private String keypass;
+
+        @NotBlank
+        private String storepass;
+
+        @NotBlank
+        private String alias;
+
+        @NotBlank
+        private String path;
+
+    }
 }
