@@ -1,0 +1,9 @@
+Basta utilizar a url:
+http://localhost:8082/oauth2/introspect
+
+body: x-xxx-form-urlencoded
+token: {passa o token}
+
+tudo isso no postman
+
+ps: Auth tem que tá acionado como basic e passar usuario e senha do client
