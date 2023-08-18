@@ -1,0 +1,9 @@
+Basta utilizar a url:
+http://localhost:8082/oauth2/jwks
+
+Oauth: none
+body: none
+
+tudo isso no postman
+
+ps: usar GET
