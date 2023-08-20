@@ -1,0 +1,4 @@
+utilizar url no navegador:
+http://localhost:8082/oauth2/authorize?response_type=code&client_id=awblog&state=abc&redirect_uri=https://oidcdebugger.com/debug&scope=myuser:read myuser:write posts:write
+
+ps:. rodar aplicação de user, admin@email.com 123456
