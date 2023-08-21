@@ -1,0 +1,9 @@
+url: http://localhost:8082/oauth2/token
+
+grant_type: authorization_code
+code: {pegar do Request auth code (navegador) exemplo: http://localhost:8082/oauth2/authorize?response_type=code&client_id=awblog&state=abc&redirect_uri=https://oidcdebugger.com/debug&scope=myuser:read myuser:write posts:write}
+redirect_uri: https://oidcdebugger.com/debug
+
+Auth: basic
+awblog
+123456
