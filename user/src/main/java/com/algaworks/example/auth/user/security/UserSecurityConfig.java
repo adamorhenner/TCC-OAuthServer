@@ -17,14 +17,11 @@ public class UserSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http,
-            UserDetailsService userDetailsService) throws Exception {
-        return http.userDetailsService(userDetailsService)
-                .csrf().disable()
-                .authorizeRequests().anyRequest().authenticated()
-                .and()
-                .httpBasic(withDefaults())
-                .build();
+            HttpSecurity http) throws Exception {
+        return http.authorizeRequests().anyRequest().authenticated()
+                .and().csrf().disable()
+                .oauth2ResourceServer()
+                .jwt()
     }
 
 }
