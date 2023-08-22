@@ -7,3 +7,9 @@ spring:
     show-sql: 'true'
     hibernate:
       ddl-auto: update
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082
+          #jwk-set-uri: http://localhost:8082/oauth2/jwks
