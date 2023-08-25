@@ -4,6 +4,7 @@ package com.algaworks.example.auth.post.api;
 import com.algaworks.example.auth.post.client.UserClient;
 import com.algaworks.example.auth.post.domain.Post;
 import com.algaworks.example.auth.post.domain.PostRepository;
+import com.algaworks.example.auth.post.security.CanWritePosts;
 import com.algaworks.example.auth.post.security.SecurityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,8 +49,7 @@ public class PostController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	//TODO Implementar segurança
-	//@CanCreatePost
+	@CanWritePosts
 	public PostDetailedResponse create(@RequestBody @Valid PostRequest postRequest) {
 		final Post post = new Post(securityService.getUserId(), postRequest.getTitle(), postRequest.getContent());
 		postRepository.save(post);
